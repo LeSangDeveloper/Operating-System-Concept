@@ -1,0 +1,1 @@
+cmd_/home/sang/Documents/Operating-System/chapter2/programming-project/simple/modules.order := {   echo /home/sang/Documents/Operating-System/chapter2/programming-project/simple/simple.ko; :; } | awk '!x[$$0]++' - > /home/sang/Documents/Operating-System/chapter2/programming-project/simple/modules.order

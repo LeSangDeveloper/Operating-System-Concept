@@ -1,0 +1,1 @@
+cmd_/home/sang/Documents/Operating-System/chapter2/programming-project/simple/Module.symvers := sed 's/ko$$/o/' /home/sang/Documents/Operating-System/chapter2/programming-project/simple/modules.order | scripts/mod/modpost -m -a   -o /home/sang/Documents/Operating-System/chapter2/programming-project/simple/Module.symvers -e -i Module.symvers   -T -

@@ -1,0 +1,1 @@
+cmd_/home/sang/Documents/Operating-System/chapter2/programming-project/simple/simple.mod := { echo  /home/sang/Documents/Operating-System/chapter2/programming-project/simple/simple.o;  echo; } > /home/sang/Documents/Operating-System/chapter2/programming-project/simple/simple.mod
