@@ -1,0 +1,80 @@
+#include<stdio.h>
+#include<unistd.h>
+#include<string.h>
+
+#define MAX_LINE 80 /*The maximum length command*/
+
+// Tokenization function: tokenizes the input stream and separates them on " "
+int tokenize(char *string, char **ret) {
+	
+	int i = 0;
+	char *token[41];
+	token[0] = strtok(string, " ");
+	
+	while(token[i] != NULL) {
+		
+		ret[i] = token[i];
+		token[++i] = strtok(NULL, " ");
+	}
+	
+	char arr1[10];
+	strcpy(arr1, ret[i - 1]);
+	token[i] = strtok(ret[i - 1], "&");
+	
+	if(strcmp(token[i], arr1) == 0) {
+		
+		ret[i] = NULL;
+		return 0;
+	}
+	
+	else {
+		
+		ret[i - 1] = token[i];
+		ret[i] = NULL;
+		return 1;
+	}
+}
+
+int main(void) {
+	char *args[MAX_LINE/2 + 1];
+	int should_run = 1; /*flag to determine when to exit program*/
+
+	while (should_run) {
+		printf("osh>");
+		fflush(stdout);
+
+		int has_ampersand;
+		char input[50];
+	
+		scanf("%[^\n]", input); // Command + Arguments input stream
+        	getchar();
+
+		/**
+		* After reading user input, the steps are:
+		* (1) fork a child process using fork()
+		* (2) the child process will invoke exevcp()
+		* (3) if the command included &, parent will invoke await
+		*/	
+
+		pid_t pid;
+		pid = fork();
+
+		printf("before\n");
+		has_ampersand = tokenize(input, args);		printf("\nafter
+		if (strcmp(*(args), "quit") == 0) {
+			should_run = 0;
+		}
+
+		if (pid == 0) {
+			printf("\n");
+			execvp(args[0], args);
+			return 0;
+		}
+
+		if (has_ampersand)
+			wait(NULL);
+
+	}
+	
+	return 0;
+}

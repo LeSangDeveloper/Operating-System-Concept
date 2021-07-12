@@ -1,0 +1,17 @@
+#include<stdio.h>
+#include<unistd.h>
+
+int main() {
+	int child = 0;
+	fork();
+	child++;
+
+	fork();
+	child++;
+
+	fork();	child++;
+
+	wait(NULL);	
+	printf("%d\n", child);
+	return 0;
+}
