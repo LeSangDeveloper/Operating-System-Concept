@@ -1,4 +1,4 @@
-obj-m += kernel-list-task.o
+obj-m += kernel-list-task-DFS.o
 all:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
 clean:
