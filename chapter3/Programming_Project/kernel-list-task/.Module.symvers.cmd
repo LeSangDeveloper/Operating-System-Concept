@@ -1,1 +1,0 @@
-cmd_/home/sang/Documents/Operating-System/chapter3/Programming_Project/kernel-list-task/Module.symvers := sed 's/ko$$/o/' /home/sang/Documents/Operating-System/chapter3/Programming_Project/kernel-list-task/modules.order | scripts/mod/modpost -m -a   -o /home/sang/Documents/Operating-System/chapter3/Programming_Project/kernel-list-task/Module.symvers -e -i Module.symvers   -T -

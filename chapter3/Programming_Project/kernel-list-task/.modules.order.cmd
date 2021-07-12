@@ -1,1 +1,0 @@
-cmd_/home/sang/Documents/Operating-System/chapter3/Programming_Project/kernel-list-task/modules.order := {   echo /home/sang/Documents/Operating-System/chapter3/Programming_Project/kernel-list-task/kernel-list-task.ko; :; } | awk '!x[$$0]++' - > /home/sang/Documents/Operating-System/chapter3/Programming_Project/kernel-list-task/modules.order
