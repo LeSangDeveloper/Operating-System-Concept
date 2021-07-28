@@ -27,6 +27,7 @@ struct TLB_table {
 
 int find_in_array(struct TLB_table array[], int n, int value);
 void enqueue_tlb(struct TLB_table queue[], int *n, struct TLB_table tlb);
+void move_backing_store_to_physical(FILE *backing_store, int page_number, int begin_of_frame_in_physical, int physical_memory[]);
 
 int main(int argc, char *argv[]) {
 	printf("\n----------VIRTUAL MEMOMRY MANAGER-----------\n");
@@ -41,7 +42,6 @@ int main(int argc, char *argv[]) {
 	FILE *output =fopen("output.txt", "w");
 
 	int physical_memory[PHYSICAL_MEMORY_SIZE];
-	char buffer[256];
 
 	int logical_address = 0;
 	int frame = 0;
@@ -74,17 +74,9 @@ int main(int argc, char *argv[]) {
 		} else if (page_table[page_number] == EMPTY) {
 			page_fault_count++;
 
-			fseek(backing_store, page_number*PAGE_SIZE, SEEK_SET);
-			fread(buffer, sizeof(char), PAGE_SIZE, backing_store);
-
-			page_table[page_number] = frame;
-
 			int begin_of_frame_in_physical = frame * PAGE_SIZE;
-
-			for (int i = 0; i < PAGE_SIZE; ++i) {
-				physical_memory[begin_of_frame_in_physical + i] = buffer[i];
-			}
-
+			page_table[page_number] = frame;
+			move_backing_store_to_physical(backing_store, page_number, begin_of_frame_in_physical, physical_memory);
 			frame++;
 
 			struct TLB_table tlb;
@@ -116,6 +108,17 @@ int main(int argc, char *argv[]) {
 	printf("\n------------END PROGRAM-------------\n");
 
 	return 0;
+}
+
+void move_backing_store_to_physical(FILE *backing_store, int page_number, int begin_of_frame_in_physical, int physical_memory[]) {
+	char buffer[256];
+	fseek(backing_store, page_number*PAGE_SIZE, SEEK_SET);
+	fread(buffer, sizeof(char), PAGE_SIZE, backing_store);
+
+	for (int i = 0; i < PAGE_SIZE; ++i) {
+		physical_memory[begin_of_frame_in_physical + i] = buffer[i];
+	}
+
 }
 
 int find_in_array(struct TLB_table array[], int n, int value) {
