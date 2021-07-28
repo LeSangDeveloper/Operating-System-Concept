@@ -26,7 +26,7 @@ struct TLB_table {
 };
 
 int find_in_array(struct TLB_table array[], int n, int value);
-void enqueue_tlb(struct TLB_table queue[], int *n, int page_number, int frame_number);
+void enqueue_tlb(struct TLB_table queue[], int *n, struct TLB_table tlb);
 
 int main(int argc, char *argv[]) {
 	printf("\n----------VIRTUAL MEMOMRY MANAGER-----------\n");
@@ -87,11 +87,15 @@ int main(int argc, char *argv[]) {
 
 			frame++;
 
-			enqueue_tlb(tlb_queue, &tlb_size, page_number, page_table[page_number]);
+			struct TLB_table tlb;
+			tlb.page_number = page_number;
+			tlb.frame_number = page_table[page_number];
+			enqueue_tlb(tlb_queue, &tlb_size, tlb);
 
 			physical_address = begin_of_frame_in_physical + page_offset;
 		} else {
-			physical_address = page_table[page_number] * 256 + page_offset;
+			int begin_of_frame_in_physical = page_table[page_number] * PAGE_SIZE;
+			physical_address = begin_of_frame_in_physical + page_offset;
 		}
 
 		value = physical_memory[physical_address];
@@ -123,7 +127,7 @@ int find_in_array(struct TLB_table array[], int n, int value) {
 	return NOT_FOUND;
 }
 
-void enqueue_tlb(struct TLB_table queue[], int *n, int page_number, int frame_number) {
+void enqueue_tlb(struct TLB_table queue[], int *n, struct TLB_table tlb) {
 	if (*n > 0) {
 		if (*n == TLB_SIZE) {
 			*n = *n - 1;
@@ -138,6 +142,6 @@ void enqueue_tlb(struct TLB_table queue[], int *n, int page_number, int frame_nu
 
 	if (*n <= 15) *n = *n + 1;
 
-	queue[0].page_number = page_number;
-	queue[0].frame_number = frame_number;
+	queue[0].page_number = tlb.page_number;
+	queue[0].frame_number = tlb.frame_number;
 }
