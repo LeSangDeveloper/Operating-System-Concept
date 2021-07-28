@@ -75,9 +75,8 @@ int main(int argc, char *argv[]) {
 			page_fault_count++;
 
 			int begin_of_frame_in_physical = frame * PAGE_SIZE;
-			page_table[page_number] = frame;
 			move_backing_store_to_physical(backing_store, page_number, begin_of_frame_in_physical, physical_memory);
-			frame++;
+			page_table[page_number] = frame++;
 
 			struct TLB_table tlb;
 			tlb.page_number = page_number;
