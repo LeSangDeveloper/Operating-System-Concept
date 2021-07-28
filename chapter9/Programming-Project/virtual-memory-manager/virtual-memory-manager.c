@@ -77,13 +77,12 @@ int main(int argc, char *argv[]) {
 			int begin_of_frame_in_physical = frame * PAGE_SIZE;
 			move_backing_store_to_physical(backing_store, page_number, begin_of_frame_in_physical, physical_memory);
 			page_table[page_number] = frame++;
+			physical_address = begin_of_frame_in_physical + page_offset;
 
 			struct TLB_table tlb;
 			tlb.page_number = page_number;
 			tlb.frame_number = page_table[page_number];
 			enqueue_tlb(tlb_queue, &tlb_size, tlb);
-
-			physical_address = begin_of_frame_in_physical + page_offset;
 		} else {
 			int begin_of_frame_in_physical = page_table[page_number] * PAGE_SIZE;
 			physical_address = begin_of_frame_in_physical + page_offset;
